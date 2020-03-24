@@ -5,6 +5,7 @@ import {View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {useSelector, useDispatch} from 'react-redux';
 
 import SignUpScreen from './src/screens/SignUpScreen';
 import SignInScreen from './src/screens/SignInScreen';
@@ -34,7 +35,9 @@ function detailFlow() {
 }
 
 function App() {
-  const loggedIn = true;
+  const state = useSelector(state => state);
+  const loggedIn = state.auth.loggedIn;
+
   return (
     <NavigationContainer>
       {loggedIn ? (

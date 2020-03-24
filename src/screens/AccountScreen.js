@@ -1,8 +1,10 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import {Text, Header} from 'react-native-elements';
+import {Text, Header, Button} from 'react-native-elements';
+import {useDispatch} from 'react-redux';
 
 const AccountScreen = () => {
+  const dispatch = useDispatch();
   return (
     <View>
       <Header
@@ -15,6 +17,12 @@ const AccountScreen = () => {
         <Text>John Smith</Text>
         <Text>150 Friends</Text>
         <Text>350 Reviews</Text>
+        <Button
+          title="Log Out"
+          onPress={() => {
+            dispatch({type: 'LOG_OUT'});
+          }}
+        />
       </View>
     </View>
   );

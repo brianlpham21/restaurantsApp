@@ -1,8 +1,10 @@
 import React from 'react';
 import {View, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
 import {Text, Button} from 'react-native-elements';
+import {useDispatch} from 'react-redux';
 
 const SignUpScreen = ({navigation}) => {
+  const dispatch = useDispatch();
   return (
     <>
       <View style={styles.mainContainer}>
@@ -14,7 +16,13 @@ const SignUpScreen = ({navigation}) => {
         </Text>
         <TextInput placeholder="Email" style={styles.input} />
         <TextInput placeholder="Password" style={styles.input} />
-        <Button title="Sign Up" style={styles.signUpButton} />
+        <Button
+          title="Sign Up"
+          style={styles.signUpButton}
+          onPress={() => {
+            dispatch({type: 'LOG_IN'});
+          }}
+        />
         <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
           <Text style={styles.signIn}>Already a user? Sign in here.</Text>
         </TouchableOpacity>
