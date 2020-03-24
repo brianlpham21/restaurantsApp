@@ -1,24 +1,56 @@
 import React from 'react';
-import {View, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+  Image,
+} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {Text, Button} from 'react-native-elements';
-import {useDispatch} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 const SignUpScreen = ({navigation}) => {
   const dispatch = useDispatch();
+  const state = useSelector(state => state);
+  Icon.loadFont();
+
   return (
     <>
       <View style={styles.mainContainer}>
-        <Text h2 style={styles.title}>
-          Yulp
-        </Text>
+        <View style={styles.titleContainer}>
+          <Image
+            source={require('../../images/yelp.png')}
+            style={styles.imageLogo}
+          />
+          <Text h2 style={styles.title}>
+            Yulp
+          </Text>
+        </View>
         <Text style={styles.subTitle}>
           A fresh new look for searching for restaurants
         </Text>
-        <TextInput placeholder="Email" style={styles.input} />
-        <TextInput placeholder="Password" style={styles.input} />
+        <TextInput
+          placeholder="Email"
+          style={styles.input}
+          onChangeText={text => {
+            dispatch({type: 'EDIT_LOGIN_INFORMATION', payload: {email: text}});
+          }}
+        />
+        <TextInput
+          placeholder="Password"
+          style={styles.input}
+          onChangeText={text => {
+            dispatch({
+              type: 'EDIT_LOGIN_INFORMATION',
+              payload: {password: text},
+            });
+          }}
+        />
         <Button
           title="Sign Up"
           style={styles.signUpButton}
+          disabled={state.auth.email === '' || state.auth.password === ''}
           onPress={() => {
             dispatch({type: 'LOG_IN'});
           }}
@@ -29,11 +61,21 @@ const SignUpScreen = ({navigation}) => {
         <Text style={styles.altSignUp}>or you can sign up with</Text>
       </View>
       <View style={styles.footerContainer}>
-        <TouchableOpacity style={styles.socialIconButton}>
-          <Text>Facebook</Text>
+        <TouchableOpacity
+          style={styles.socialIconButton}
+          onPress={() => {
+            dispatch({type: 'LOG_IN'});
+          }}>
+          <Icon name="facebook-official" size={25} color="#4267B2" />
+          <Text style={styles.socialIconText}>Facebook</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.socialIconButton}>
-          <Text>Google</Text>
+        <TouchableOpacity
+          style={styles.socialIconButton}
+          onPress={() => {
+            dispatch({type: 'LOG_IN'});
+          }}>
+          <Icon name="google" size={25} color="#DB4437" />
+          <Text style={styles.socialIconText}>Google</Text>
         </TouchableOpacity>
       </View>
     </>
@@ -49,6 +91,13 @@ const styles = StyleSheet.create({
     flex: 8,
     justifyContent: 'center',
   },
+  titleContainer: {
+    flexDirection: 'row',
+  },
+  imageLogo: {
+    height: 55,
+    width: 55,
+  },
   title: {
     color: 'white',
     marginBottom: 20,
@@ -60,7 +109,6 @@ const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: 'white',
-    color: 'white',
     padding: 10,
     fontSize: 20,
     borderRadius: 5,
@@ -91,8 +139,13 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     marginLeft: 5,
-    width: 90,
+    width: 120,
     alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  socialIconText: {
+    marginLeft: 8,
   },
 });
 
