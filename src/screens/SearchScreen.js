@@ -1,8 +1,11 @@
 import React, {useEffect, useCallback} from 'react';
 import {View, StyleSheet, TextInput, FlatList} from 'react-native';
 import {Header, Text, Button} from 'react-native-elements';
-import {searchApi} from '../actions/restaurants';
 import {useSelector, useDispatch} from 'react-redux';
+
+import {searchApi} from '../actions/restaurants';
+
+import Results from '../components/Results';
 
 const SearchScreen = ({navigation}) => {
   const dispatch = useDispatch();
@@ -12,7 +15,7 @@ const SearchScreen = ({navigation}) => {
   useEffect(() => {
     async function getRestaurants() {
       const businesses = await searchApi('cake');
-      stableDispatch({type: 'LOAD_RESTAURANTS', payload: businesses});
+      stableDispatch({type: 'LOAD_SEARCH_RESTAURANTS', payload: businesses});
     }
     getRestaurants();
   }, [stableDispatch]);
@@ -23,49 +26,61 @@ const SearchScreen = ({navigation}) => {
         centerComponent={{text: 'Search', style: {color: '#fff'}}}
         containerStyle={{backgroundColor: '#7E5C7E'}}
       />
-      <View style={styles.container}>
-        <TextInput
-          style={styles.input}
-          value={state.restaurants.searchTerm}
-          placeholder="Search"
-          onChangeText={searchTerm => {
-            dispatch({type: 'SET_SEARCH_TERM', payload: searchTerm});
-          }}
-        />
-        <Button
-          title="Submit"
-          style={styles.submitButton}
-          onPress={async () => {
-            const businesses = await searchApi(state.restaurants.searchTerm);
-            dispatch({type: 'LOAD_RESTAURANTS', payload: businesses});
-          }}
-        />
-        <Button title="Detail" onPress={() => navigation.navigate('Details')} />
-        <FlatList
-          data={state.restaurants.list}
-          keyExtractor={restaurant => restaurant.id}
-          renderItem={({item}) => {
-            return <Text>{item.name}</Text>;
-          }}
-        />
-      </View>
+      <TextInput
+        style={styles.input}
+        value={state.restaurants.searchTerm}
+        placeholder="Search"
+        onChangeText={searchTerm => {
+          dispatch({type: 'SET_SEARCH_TERM', payload: searchTerm});
+        }}
+      />
+      <Button
+        title="Submit"
+        style={styles.submitButton}
+        onPress={async () => {
+          const businesses = await searchApi(state.restaurants.searchTerm);
+          dispatch({type: 'LOAD_SEARCH_RESTAURANTS', payload: businesses});
+        }}
+      />
+      <Results
+        navigation={navigation}
+        title="Budget"
+        price="$"
+        list={state.restaurants.searchList}
+      />
+      <Results
+        navigation={navigation}
+        title="Average"
+        price="$$"
+        list={state.restaurants.searchList}
+      />
+      <Results
+        navigation={navigation}
+        title="Big Spender"
+        price="$$$"
+        list={state.restaurants.searchList}
+      />
+      <Results
+        navigation={navigation}
+        title="Baller"
+        price="$$$$"
+        list={state.restaurants.searchList}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    margin: 10,
-  },
   input: {
     backgroundColor: 'white',
     padding: 10,
     fontSize: 20,
     borderRadius: 5,
-    marginBottom: 10,
+    margin: 10,
   },
   submitButton: {
-    marginBottom: 10,
+    marginLeft: 10,
+    marginRight: 10,
   },
 });
 

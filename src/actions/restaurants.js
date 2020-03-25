@@ -1,7 +1,6 @@
 import api from '../api/restaurants';
 
 export const searchApi = async searchTerm => {
-  console.log(searchTerm);
   try {
     const response = await api.get('/search', {
       params: {

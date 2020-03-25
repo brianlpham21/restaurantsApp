@@ -12,6 +12,7 @@ const DetailScreen = () => {
         }}
       />
       <Text>Detail Screen</Text>
+      <Text>h</Text>
     </View>
   );
 };
