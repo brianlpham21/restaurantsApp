@@ -10,9 +10,10 @@ const authReducer = (state = initialState, action) => {
       return {...state, loggedIn: true};
     case 'LOG_OUT':
       return {...state, loggedIn: false};
-    case 'EDIT_LOGIN_INFORMATION': {
+    case 'EDIT_LOGIN_INFORMATION':
       return {...state, ...action.payload};
-    }
+    case 'CLEAR_LOGIN_INFORMATION':
+      return {...state, email: '', password: ''};
     default:
       return state;
   }

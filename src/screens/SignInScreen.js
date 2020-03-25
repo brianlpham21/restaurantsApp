@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useCallback} from 'react';
 import {
   View,
   StyleSheet,
@@ -13,7 +13,16 @@ import {useSelector, useDispatch} from 'react-redux';
 const SignInScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const state = useSelector(state => state);
+  const stableDispatch = useCallback(dispatch, []);
   Icon.loadFont();
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      stableDispatch({type: 'CLEAR_LOGIN_INFORMATION'});
+    });
+
+    return unsubscribe;
+  }, [navigation, stableDispatch]);
 
   return (
     <>
@@ -33,6 +42,7 @@ const SignInScreen = ({navigation}) => {
         <TextInput
           placeholder="Email"
           style={styles.input}
+          value={state.auth.email}
           onChangeText={text => {
             dispatch({type: 'EDIT_LOGIN_INFORMATION', payload: {email: text}});
           }}
@@ -40,6 +50,7 @@ const SignInScreen = ({navigation}) => {
         <TextInput
           placeholder="Password"
           style={styles.input}
+          value={state.auth.password}
           onChangeText={text => {
             dispatch({
               type: 'EDIT_LOGIN_INFORMATION',
